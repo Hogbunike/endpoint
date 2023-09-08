@@ -9,17 +9,27 @@ import pytz
 
 def get_info(request):
     slack_name = request.GET.get('slack_name', 'Ogbunike Henry Chukwuebuka')
-    track = request.GET.get('track', 'Backend')
+    track = request.GET.get('track', '')
 
     # get current day
-    current_datetime = datetime.now()
+    current_datetime = datetime.now(pytz.utc)
     current_day = current_datetime.strftime('%A')
+
     # get utc time
-    time = current_datetime.strftime('%H:%M:%S')
+    utc_time = datetime.utcnow().replace(tzinfo=pytz.utc)
+    time_diff = (current_datetime - utc_time).total_seconds()
+    max_time_diff = 120
+    
+    if abs(time_diff) <= max_time_diff:
+        time = utc_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+    else:
+        time = ''
+
 
     # github urls
-    github_repo_url = 'https//github_repo'
-    github_file_url = 'https//github_repo'
+    github_repo_url = 'https://github.com/Hogbunike/endpoint.git'
+    github_file_url = 'https://github.com/Hogbunike/endpoint/blob/e186f0666d78a265991bb278ec16bb9c2f379ec7/my_endpoint/views.py'
+
 
     # json response
     response_data = {
