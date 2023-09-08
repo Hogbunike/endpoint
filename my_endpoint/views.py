@@ -11,19 +11,9 @@ def get_info(request):
     slack_name = request.GET.get('slack_name', 'Ogbunike Henry Chukwuebuka')
     track = request.GET.get('track', '')
 
-    # get current day
-    current_datetime = datetime.now(pytz.utc)
-    current_day = current_datetime.strftime('%A')
-
-    # get utc time
-    utc_time = datetime.utcnow().replace(tzinfo=pytz.utc)
-    time_diff = (current_datetime - utc_time).total_seconds()
-    max_time_diff = 120
     
-    if abs(time_diff) <= max_time_diff:
-        time = utc_time.strftime('%Y-%m-%dT%H:%M:%SZ')
-    else:
-        time = ''
+    current_day = datetime.now().strftime("%A")
+    utc_time = datetime.now(pytz.utc)
 
 
     # github urls
@@ -36,7 +26,7 @@ def get_info(request):
         'slack_name': slack_name,
         'track': track,
         'current_day': current_day,
-        'time': time,
+        'time': utc_time,
         'github_repo_url': github_repo_url,
         'github_file_url': github_file_url,
         'status_coode': 200,
